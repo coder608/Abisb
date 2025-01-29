@@ -1,0 +1,24 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'ShoppingProducts.dart';
+
+class ShoppingCart with ChangeNotifier{
+  List<Shop> _item=[];
+
+  List<Shop> get item => _item;
+
+  void add(Shop product){
+    _item.add(product);
+    print(_item);
+    notifyListeners();
+  }
+  void remove(Shop products)
+  {
+    _item.remove(products);
+    notifyListeners();
+  }
+
+  double get totalprice{
+    return _item.fold(0.0, (sum,item) => item.price+sum);
+}
+}

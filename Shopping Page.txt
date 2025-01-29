@@ -1,0 +1,87 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'ShoppingCart.dart';
+
+class ShoppingPage extends StatefulWidget {
+  static const routeName = '/shoppingcart';
+  const ShoppingPage({super.key});
+
+  @override
+  State<ShoppingPage> createState() => _ShoppingPageState();
+}
+
+class _ShoppingPageState extends State<ShoppingPage> {
+  @override
+  Widget build(BuildContext context) {
+    final shoppingcart= Provider.of<ShoppingCart>(context) ;
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Shopping Page"),
+      ),
+      body: Column(
+        children: [
+          Expanded(
+              child: ListView.builder(
+                  padding: const EdgeInsets.all(8.0),
+                itemCount: shoppingcart.item.length,
+                  itemBuilder: (context,index){
+                    return Card(
+                      margin: const EdgeInsets.symmetric(vertical: 8.0),
+                      child:Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Row(
+                          children: [
+                            Image.asset(
+                              shoppingcart.item[index].image,
+                              width: 80,
+                              height: 80,
+                              fit: BoxFit.cover,
+                            ),
+                            SizedBox(width: 16,),
+                            Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          shoppingcart.item[index].name,
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        SizedBox(height: 8,),
+                                        Text("Rs${shoppingcart.item[index].price.toStringAsFixed(2)},",
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.grey[600])
+                                        )
+                                      ],
+                                ),
+                            ),
+                            IconButton(
+                                onPressed:() {
+
+                                  shoppingcart.remove(shoppingcart.item[index]);
+                                },
+                                icon: Icon(Icons.delete))
+                          ],
+                        ),
+                      ) ,
+                    );
+                  }
+
+
+
+              )
+          ),
+          Padding(padding: const EdgeInsets.all(16),
+          child: Text(
+            'Total:Rs.${shoppingcart.totalprice.toStringAsFixed(2)}',
+            style: TextStyle(fontSize: 20),
+          ),
+          )
+        ],
+      ),
+    );
+  }
+}

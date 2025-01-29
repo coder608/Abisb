@@ -1,0 +1,108 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'ShoppingCart.dart';
+import 'package:badges/badges.dart' as badge;
+import 'ShoppingProducts.dart';
+import 'ShoppingPage.dart';
+
+
+class ShoppingList extends StatefulWidget {
+  final List<Shop> products=[
+    Shop(name: 'Samsung', price: 15000, image: 'assets/images/samsung.jpeg'),
+    Shop(name: 'Apple', price: 45000, image: 'assets/images/apple_phone.jpeg'),
+    Shop(name: 'Realme', price: 25000, image: 'assets/images/realme.jpeg'),
+    Shop(name: 'Redmi', price: 28000, image: 'assets/images/redmi.jpeg'),
+    Shop(name: 'Moto', price: 32000, image: 'assets/images/moto.jpeg')
+  ];
+
+   ShoppingList({super.key});
+
+  @override
+  State<ShoppingList> createState() => _ShoppingListState();
+}
+
+class _ShoppingListState extends State<ShoppingList> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Products",),
+        actions: [
+          Consumer<ShoppingCart>(
+              builder:(context,shoppingcart,child){
+                return badge.Badge(
+                  position: badge.BadgePosition.topEnd(top: 0,end: 3),
+                  badgeContent: Text(
+                    shoppingcart.item.length.toString(),
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  child:IconButton(
+                    icon: Icon(Icons.shopping_cart,
+                    size: 40,),
+                    onPressed: (){
+                      Navigator.pushNamed(context,ShoppingPage.routeName);
+
+                    },
+                  ),
+                ) ;
+              })
+        ],
+      ),
+      body: ListView.builder(
+        padding: const EdgeInsets.all(8),
+        itemCount: widget.products.length,
+          itemBuilder: (context , index){
+          return Card(
+            margin: const EdgeInsets.symmetric(vertical: 8.0),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                children: [
+                  Image.asset(
+                    widget.products[index].image,
+                    width: 80,
+                    height: 80,
+                    fit: BoxFit.cover,
+                  ),
+                  SizedBox(width: 16.0),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.products[index].name,
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 8.0),
+                        Text(
+                          'Rs ${widget.products[index].price.toStringAsFixed(2)}',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.grey[600],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  ElevatedButton(
+                    child: Icon(
+                      Icons.add_shopping_cart,
+                      size: 40,
+                    ),
+                    onPressed: () {
+                      Provider.of<ShoppingCart>(context, listen: false).add(widget.products[index]);
+                    },
+                  ),
+                ],
+              ),
+            ),
+
+          );
+          }
+      ),
+    );
+  }
+}

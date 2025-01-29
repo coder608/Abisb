@@ -1,0 +1,34 @@
+import 'package:firebasebala/ExamLogin.dart';
+import 'package:firebasebala/ShoppingCart.dart';
+import 'package:firebasebala/ShoppingList.dart';
+import 'package:firebasebala/ShoppingPage.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'product.dart';
+import 'Cart.dart';
+import 'ListProductPage.dart';
+import 'CartPage.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (context) => Cart(),
+      child: MaterialApp(
+        title: 'Shopping Cart',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: ListProductsPage(),
+        routes: {
+          CartPage.routeName: (context) => CartPage(),
+        },
+      ),
+    );
+  }
+}
